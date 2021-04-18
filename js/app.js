@@ -88,7 +88,7 @@ function handleClicking(event) {
 let container = document.getElementById('container');
 let btn = document.createElement('button');
 container.appendChild(btn);
-btn.textContent = 'view results';
+btn.textContent = 'View Results';
 btn.onclick = renderList;
  function renderList(){
   let ul = document.getElementById('unList');
