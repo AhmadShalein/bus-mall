@@ -53,9 +53,11 @@ function renderThreeImages() {
     middleIndex = genrateRandomIndex();
   }
   leftImageElement.src = photo.allImages[leftIndex].source;
+  photo.allImages[leftIndex].views++;
   middleImageElement.src = photo.allImages[middleIndex].source;
+  photo.allImages[middleIndex].views++;
   rightImageElement.src = photo.allImages[rightIndex].source;
-
+  photo.allImages[rightIndex].views++;
 }
 renderThreeImages();
 
@@ -68,13 +70,10 @@ function handleClicking(event) {
   if (maxRounds >= counter) {
     if (event.target.id === 'left-image') {
       photo.allImages[leftIndex].votes++;
-      photo.allImages[leftIndex].views++;
     } else if (event.target.id === 'middle-image') {
       photo.allImages[middleIndex].votes++;
-      photo.allImages[middleIndex].views++;
     } else if (event.target.id === 'right-image') {
       photo.allImages[middleIndex].votes++;
-      photo.allImages[middleIndex].views++;
     }
     renderThreeImages();
     console.log(photo.allImages);
@@ -84,12 +83,13 @@ function handleClicking(event) {
     rightImageElement.removeEventListener('click', handleClicking);
   }
 }
+let button = document.getElementById('btn');
+button.addEventListener('click',showningList);
 
-let container = document.getElementById('container');
-let btn = document.createElement('button');
-container.appendChild(btn);
-btn.textContent = 'View Results';
-btn.onclick = renderList;
+function showningList(){
+  renderList();
+  button.removeEventListener('click',showningList);
+}
  function renderList(){
   let ul = document.getElementById('unList');
   for (let i = 0; i < photo.allImages.length; i++){
