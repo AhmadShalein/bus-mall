@@ -9,6 +9,10 @@ let maxRounds = 25;
 let leftIndex;
 let middleIndex;
 let rightIndex;
+let prevLeftIndex;
+let prevMiddleIndex;
+let prevRightIndex;
+let arrOfNames = [];
 
 function photo(name, source) {
   this.name = name;
@@ -16,6 +20,7 @@ function photo(name, source) {
   this.votes = 0;
   this.views = 0;
   photo.allImages.push(this);
+  arrOfNames.push(this.name);
 }
 
 
@@ -52,6 +57,20 @@ function renderThreeImages() {
     leftIndex = genrateRandomIndex();
     middleIndex = genrateRandomIndex();
   }
+  while (leftIndex === prevLeftIndex || leftIndex === prevMiddleIndex || leftIndex === prevRightIndex) {
+    leftIndex = genrateRandomIndex();
+    leftIndex = prevLeftIndex;
+  }
+  while (middleIndex === prevLeftIndex || middleIndex === prevMiddleIndex || middleIndex === prevRightIndex || middleIndex === leftIndex) {
+    middleIndex = genrateRandomIndex();
+    middleIndex = prevMiddleIndex;
+  }
+  while (rightIndex === prevLeftIndex || rightIndex === prevMiddleIndex || rightIndex === prevRightIndex || rightIndex === leftIndex || rightIndex === middleIndex) {
+    rightIndex = genrateRandomIndex();
+    rightIndex = prevRightIndex;
+  }
+  console.log(leftIndex,middleIndex,rightIndex);
+
   leftImageElement.src = photo.allImages[leftIndex].source;
   photo.allImages[leftIndex].views++;
   middleImageElement.src = photo.allImages[middleIndex].source;
@@ -88,11 +107,18 @@ button.addEventListener('click',showningList);
 
 function showningList(){
   renderList();
+  chart();
   button.removeEventListener('click',showningList);
 }
+
+  let arrOfVotes = [];
+  let arrOfViews = [];
+
  function renderList(){
   let ul = document.getElementById('unList');
   for (let i = 0; i < photo.allImages.length; i++){
+    arrOfVotes.push(photo.allImages[i].votes);
+    arrOfViews.push(photo.allImages[i].views);
     let li = document.createElement('li');
     ul.appendChild(li);
     li.textContent = `${photo.allImages[i].name} had ${photo.allImages[i].votes} votes, and was seen ${photo.allImages[i].views} times`;
@@ -100,4 +126,28 @@ function showningList(){
  }
 function genrateRandomIndex() {
   return Math.floor(Math.random() * photo.allImages.length);
+}
+
+function chart(){
+var ctx = document.getElementById('myChart').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: arrOfNames,
+        datasets: [{
+            label: 'Number Of Votes',
+            data: arrOfVotes,
+            backgroundColor: [
+                'rgba(60, 60, 60, 0.5)'
+            ],
+            borderWidth: 1
+        },{label: 'Number Of Views',
+        data: arrOfViews,
+        backgroundColor: [
+            'rgba(255, 0, 0, 0.5)'
+        ],
+        borderWidth: 1
+    }]
+    }
+})
 }
