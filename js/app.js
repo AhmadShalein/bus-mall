@@ -9,10 +9,8 @@ let maxRounds = 25;
 let leftIndex;
 let middleIndex;
 let rightIndex;
-let prevLeftIndex;
-let prevMiddleIndex;
-let prevRightIndex;
 let arrOfNames = [];
+let prevViews =[];
 
 function photo(name, source) {
   this.name = name;
@@ -52,24 +50,15 @@ function renderThreeImages() {
   leftIndex = genrateRandomIndex();
   middleIndex = genrateRandomIndex();
   rightIndex = genrateRandomIndex();
+  console.log('Before',prevViews);
 
-  while (leftIndex === rightIndex || leftIndex === middleIndex || rightIndex === middleIndex) {
+  while (leftIndex === rightIndex || leftIndex === middleIndex || rightIndex === middleIndex || prevViews.includes(leftIndex) || prevViews.includes(middleIndex) || prevViews.includes(rightIndex)) {
     leftIndex = genrateRandomIndex();
     middleIndex = genrateRandomIndex();
-  }
-  while (leftIndex === prevLeftIndex || leftIndex === prevMiddleIndex || leftIndex === prevRightIndex) {
-    leftIndex = genrateRandomIndex();
-    leftIndex = prevLeftIndex;
-  }
-  while (middleIndex === prevLeftIndex || middleIndex === prevMiddleIndex || middleIndex === prevRightIndex || middleIndex === leftIndex) {
-    middleIndex = genrateRandomIndex();
-    middleIndex = prevMiddleIndex;
-  }
-  while (rightIndex === prevLeftIndex || rightIndex === prevMiddleIndex || rightIndex === prevRightIndex || rightIndex === leftIndex || rightIndex === middleIndex) {
     rightIndex = genrateRandomIndex();
-    rightIndex = prevRightIndex;
   }
-  console.log(leftIndex,middleIndex,rightIndex);
+  prevViews =[leftIndex,middleIndex,rightIndex];
+  console.log('After',prevViews);
 
   leftImageElement.src = photo.allImages[leftIndex].source;
   photo.allImages[leftIndex].views++;
