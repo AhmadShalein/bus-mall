@@ -19,8 +19,23 @@ function photo(name, source) {
   this.views = 0;
   photo.allImages.push(this);
   arrOfNames.push(this.name);
+  photo.save.push(this);
 }
 
+photo.save = [];
+function saveToLocalStorge() {
+  let arrayStorge = JSON.stringify(photo.save);
+  localStorage.setItem('Voting', arrayStorge);
+}
+
+function getFromLocalStorge() {
+  let photoString = localStorage.getItem('Voting');
+  let order = JSON.parse(photoString);
+  console.log(order);
+  if (photoString !== null){
+    photo.save = order;
+  }
+}
 
 photo.allImages = [];
 new photo('bag', 'img/bag.jpg');
@@ -89,6 +104,7 @@ function handleClicking(event) {
     leftImageElement.removeEventListener('click', handleClicking);
     middleImageElement.addEventListener('click', handleClicking);
     rightImageElement.removeEventListener('click', handleClicking);
+    saveToLocalStorge();
   }
 }
 let button = document.getElementById('btn');
@@ -140,3 +156,4 @@ var myChart = new Chart(ctx, {
     }
 })
 }
+getFromLocalStorge();
